@@ -23,11 +23,12 @@ def is_node(value):
     return type(value) == str(Node)
 
 # params : value : value to check,s : name of the value, t : type of the value
-def is_type_or_raise(value,s,t):
+def is_type_or_raise(value, s, t):
     if value is None:
-        raise Exception(s+" can not be None.")
-    if type(value) != str(t):
-        raise Exception(s+" needs to be of type "+str(t)+".")
+        raise Exception(f"{s} can not be None.")
+    if type(value) != t:
+        raise Exception(f"{s} needs to be of type {t}.")
+    return None
 
 class Vertex:
     def __init__(self, head,tail):
@@ -100,8 +101,14 @@ class Graph:
         if vertices is None:
             self.__vertices = []
         self.__nodes = nodes
-    
-    
+    """
+        # dict uses a hashtable. 
+        # We have an average of O(1) and a worst case time complexity of O(n)
+        self.__adjacency_hash = dict()
+        #for node in list(nodes):
+        #    self.__adjacency_hash
+    """ 
+
     def nodes(self):
         return self.__nodes 
     
@@ -119,7 +126,11 @@ class Graph:
             raise Exception("The new vertex must only be connected with nodes within the graph.")
         self.__vertices.append(vertex)
         return vertex
-    
+    """
+    #Returns all adjacent nodes. This may include the node itself in case of a loop.
+    def adjacent(self,node):
+        is_type_or_raise(node,"Node",Node)
+    """
 
 
 
