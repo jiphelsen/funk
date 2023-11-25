@@ -17,10 +17,18 @@ class Node:
     def label(self):
         return self.__label
     
+    def __eq__(self, other):
+        if isinstance(other, Node):
+            return self.label() == other.label() and self.value() == other.value()
+        return False
+    def __hash__(self):
+        return hash((self.label(), self.value()))
+    def __str__(self):
+        return "(value="+str(self.value())+", label="+str(self.label())+")"
 
 
 def is_node(value):
-    return type(value) == str(Node)
+    return type(value) is Node
 
 # params : value : value to check,s : name of the value, t : type of the value
 def is_type_or_raise(value, s, t):
@@ -55,13 +63,13 @@ class Vertex:
     
     # Returns a set of the head an the tail
     def nodes(self):
-        return set([self.get_head(),self.get_tail()])
+        return set([self.head(),self.tail()])
 
     def is_loop(self):
-        return self.head().equals(self.tail)
+        return self.head() == self.tail()
     
 def is_vertex(value):
-    return type(value) != str(Vertex)
+    return type(value) is Vertex
 
 def is_set(value):
     return type(value) is set
@@ -74,26 +82,27 @@ class Graph:
         if nodes is not None :
             if not is_set(nodes):
                 raise Exception("Nodes needs to be of type set.")
-            if any([is_node(node) for node in list(nodes)]):
+            if any([not is_node(node) for node in list(nodes)]):
                 raise Exception("All values in nodes need to be of type Node.")
             
         if vertices is not None :
-            if any([is_vertex(vertex) for vertex in vertices]):
+            if any([not is_vertex(vertex) for vertex in vertices]):
                 raise Exception("All values in vertices need to be of type Vertex.")
 
-        vnodes = set()
-        for vertex in vertices:
-            vnodes.union(vertex.nodes())
-        # Vertices include nodes that are not part of the graph
-        if not vnodes.issubset(set(nodes)) : 
-            raise Exception("All vertices need to be only connected to nodes within the graph.")
+            vnodes = set()
+            for vertex in vertices:
+                vnodes = vnodes.union(vertex.nodes())
+            
+            # Vertices include nodes that are not part of the graph
+            if not vnodes.issubset(set(nodes)) : 
+                raise Exception("All vertices need to be only connected to nodes within the graph.")
         
 
         # If nodes is none vertices must be
         if nodes is None :
             self.__nodes = set()
             self.__vertices = []
-            return self
+            return
         
         # These two ifs need to be in this order or both would run.
         if vertices is not None :
@@ -121,7 +130,7 @@ class Graph:
         return self.__vertices
     
     def add_vertex(self,vertex):
-        is_type_or_raise(node,"New vertex",Vertex)
+        is_type_or_raise(vertex,"New vertex",Vertex)
         if not set(vertex.nodes()).issubset(self.nodes()):
             raise Exception("The new vertex must only be connected with nodes within the graph.")
         self.__vertices.append(vertex)
