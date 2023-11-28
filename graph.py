@@ -102,14 +102,14 @@ class Graph:
         if nodes is None :
             self.__nodes = set()
             self.__vertices = []
-            return
         
         # These two ifs need to be in this order or both would run.
         if vertices is not None :
             self.__vertices = vertices
         if vertices is None:
             self.__vertices = []
-        self.__nodes = nodes
+        if nodes is not None:
+            self.__nodes = nodes
 
         # Dictionary to store the adjacency hash node -> adjacend nodes 
         self.__adjacency_hash = {node: set() for node in self.__nodes}
@@ -123,36 +123,32 @@ class Graph:
     def nodes(self):
         return self.__nodes 
     
-    def add_node(self,node):
-        is_type_or_raise(node,"New node",Node)
+    def add_node(self, node):
+        is_type_or_raise(node, "New node", Node)
         self.__nodes.add(node)
+
+        # Update the adjacency hash with the new node
+        self.__adjacency_hash[node] = set()
+
         return node
     
     def vertices(self):
         return self.__vertices
     
-    def add_vertex(self,vertex):
-        is_type_or_raise(vertex,"New vertex",Vertex)
+    def add_vertex(self, vertex):
+        is_type_or_raise(vertex, "New vertex", Vertex)
         if not set(vertex.nodes()).issubset(self.nodes()):
             raise Exception("The new vertex must only be connected with nodes within the graph.")
+        
+        # Add the vertex to the list of vertices
         self.__vertices.append(vertex)
+
+        # Update the adjacency hash based on the new vertex
+        head, tail = vertex.head(), vertex.tail()
+        self.__adjacency_hash[head].add(tail)
+        self.__adjacency_hash[tail].add(head)
         return vertex
     
     def adjacency(self, node):
         is_type_or_raise(node, "Node", Node)
         return self.__adjacency_hash[node]
-
-    
-
-
-
-
-
-
-        
-    
-
-
-
-        
-        

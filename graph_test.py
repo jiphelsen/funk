@@ -264,6 +264,47 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(adj_nodes_1, expected_adj_nodes_1)
         self.assertEqual(adj_nodes_2, expected_adj_nodes_2)
         self.assertEqual(adj_nodes_3, expected_adj_nodes_3)
+    def test_add_node_no_vertices(self):
+        # Test adding a node to the graph with no vertices
+        graph = Graph()
+
+        node = Node(label="NewNodeLabel", value="NewNodeValue")
+        graph.add_node(node)
+
+        self.assertEqual(graph.nodes(), {node})
+        self.assertEqual(graph.adjacency(node), set())
+
+    def test_add_vertex_and_adjacency(self):
+        # Test adding a vertex and checking adjacency
+        graph = Graph()
+
+        node1 = Node(label="Node1Label", value="Node1Value")
+        node2 = Node(label="Node2Label", value="Node2Value")
+
+        graph.add_node(node1)
+        graph.add_node(node2)
+
+        vertex = Vertex(head=node1, tail=node2)
+        graph.add_vertex(vertex)
+
+        # Check that the adjacency hash is updated correctly
+        expected_adjacency = {node2}
+        expected_adjacency2 = {node1}
+        self.assertEqual(graph.adjacency(node1), expected_adjacency)
+        self.assertEqual(graph.adjacency(node2), expected_adjacency2)
+
+        # Add another node and check the adjacency hash again
+        node3 = Node(label="Node3Label", value="Node3Value")
+        graph.add_node(node3)
+
+        vertex2 = Vertex(head=node2, tail=node3)
+        graph.add_vertex(vertex2)
+
+        expected_adjacency_node2 = {node1, node3}
+        expected_adjacency_node3 = {node2}
+
+        self.assertEqual(graph.adjacency(node2), expected_adjacency_node2)
+        self.assertEqual(graph.adjacency(node3), expected_adjacency_node3)
 
 if __name__ == '__main__':
     unittest.main()
