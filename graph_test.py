@@ -237,7 +237,33 @@ class TestGraph(unittest.TestCase):
             str(context.exception),
             "All vertices need to be only connected to nodes within the graph."
         )
+        
+    def test_graph_adjacency(self):
+        # Maak enkele nodes en een vertex voor testdoeleinden
+        node1 = Node(label="Node1Label", value="Node1Value")
+        node2 = Node(label="Node2Label", value="Node2Value")
+        node3 = Node(label="Node3Label", value="Node3Value")
 
+        vertex1 = Vertex(head=node1, tail=node2)
+        vertex2 = Vertex(head=node2, tail=node3)
+
+        # Maak een graph met de nodes en vertices
+        graph = Graph(nodes={node1, node2, node3}, vertices=[vertex1, vertex2])
+
+        # Test de adjacency-methode
+        adj_nodes_1 = graph.adjacency(node1)
+        adj_nodes_2 = graph.adjacency(node2)
+        adj_nodes_3 = graph.adjacency(node3)
+
+        # Verwachte aangrenzende knopen voor elk knooppunt
+        expected_adj_nodes_1 = {node2}
+        expected_adj_nodes_2 = {node1, node3}
+        expected_adj_nodes_3 = {node2}
+
+        # Controleer of de verkregen aangrenzende knopen overeenkomen met de verwachte
+        self.assertEqual(adj_nodes_1, expected_adj_nodes_1)
+        self.assertEqual(adj_nodes_2, expected_adj_nodes_2)
+        self.assertEqual(adj_nodes_3, expected_adj_nodes_3)
 
 if __name__ == '__main__':
     unittest.main()

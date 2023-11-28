@@ -110,13 +110,15 @@ class Graph:
         if vertices is None:
             self.__vertices = []
         self.__nodes = nodes
-    """
-        # dict uses a hashtable. 
-        # We have an average of O(1) and a worst case time complexity of O(n)
-        self.__adjacency_hash = dict()
-        #for node in list(nodes):
-        #    self.__adjacency_hash
-    """ 
+
+        # Dictionary to store the adjacency hash node -> adjacend nodes 
+        self.__adjacency_hash = {node: set() for node in self.__nodes}
+
+        # Update de adjacency_hash op basis van vertices
+        for vertex in self.__vertices:
+            head, tail = vertex.head(), vertex.tail()
+            self.__adjacency_hash[head].add(tail)
+            self.__adjacency_hash[tail].add(head)
 
     def nodes(self):
         return self.__nodes 
@@ -135,12 +137,12 @@ class Graph:
             raise Exception("The new vertex must only be connected with nodes within the graph.")
         self.__vertices.append(vertex)
         return vertex
-    """
-    #Returns all adjacent nodes. This may include the node itself in case of a loop.
-    def adjacent(self,node):
-        is_type_or_raise(node,"Node",Node)
-    """
+    
+    def adjacency(self, node):
+        is_type_or_raise(node, "Node", Node)
+        return self.__adjacency_hash[node]
 
+    
 
 
 
