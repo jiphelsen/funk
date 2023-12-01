@@ -67,9 +67,9 @@ for tick in range(0,8):
         camera.wait()
 
     print_world_state()
-        
-    
 
+assert real_world["world_map"][0] == 0
+assert real_world["world_map"][1] == 0
 
 
 

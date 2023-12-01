@@ -14,14 +14,14 @@ class Sensor:
         self.__cooldown = self.input_speed
         output = self.input_function(world)
         for parent in self.parents:
-            parent.update(output)
+            parent["axion"].act(parent["setter"],output)
         return output
     
     def reset(self):
         self.__cooldown = 0
 
-    def add_parent(self,parent):
-        self.parents.append(parent)
+    def add_parent(self,parent,setter):
+        self.parents.append({"axion":parent,"setter":setter})
     
     def wait(self):
         if self.__cooldown ==0:return

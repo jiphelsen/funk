@@ -1,4 +1,4 @@
-class reflex_state:
+class :
     def __init__(self,world,evolution_function):
         self.world = world
         self.evolve = evolution_function
