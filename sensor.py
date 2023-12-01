@@ -17,5 +17,12 @@ class Sensor:
             parent.update(output)
         return output
     
+    def reset(self):
+        self.__cooldown = 0
+
     def add_parent(self,parent):
         self.parents.append(parent)
+    
+    def wait(self):
+        if self.__cooldown ==0:return
+        self.__cooldown-=1
